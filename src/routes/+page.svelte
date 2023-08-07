@@ -6,6 +6,15 @@
   import DataGrid from "$lib/components/data-grid.svelte";
 
 	import Modal from "$lib/components/modal.svelte";
+  let filas
+
+  fetch('https://randomuser.me/api/?results=50')
+    .then(res => res.json())
+    .then(res => {
+      filas = res.results
+    })
+
+
 
   let items = {
     'uno': {c:CompoDos},
@@ -16,38 +25,17 @@
 
   let columnas = [
     {
-      posicion: 1,
       titulo: 'Nombre',
-      columna: 'uno',
+      getter: (f) => `${f.name.first} ${f.name.last}`,
+      ordenar: true
     },
     {
-      posicion: 3,
-      titulo: 'Campaña',
-      columna: 'tres',
-    },
-    {
-      posicion: 2,
-      titulo: 'Personaje',
-      columna: 'dos',
+      titulo: 'Email',
+      columna: 'email',
+      ancho: 500
     }
   ]
-  let datos = [
-    {
-      uno: 'Ani',
-      dos: 'Kwatmelmie',
-      tres: 'Phandelver'
-    },
-    {
-      uno: 'Vloos',
-      dos: 'Río',
-      tres: 'Kingmaker'
-    },
-    {
-      uno: 'Oliver',
-      dos: 'Karlsberg Bue',
-      tres: 'Comandos'
-    },
-  ]
+
 
   /**@type {import('svelte').SvelteComponent}*/
   let modal
@@ -75,4 +63,4 @@
   >Abrir Cerrar</button>
 </div>
 <Tabs {items}/>
-<DataGrid {columnas} {datos}/>
+<DataGrid {columnas} {filas}/>

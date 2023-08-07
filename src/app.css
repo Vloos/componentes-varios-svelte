@@ -170,7 +170,7 @@ section, .contenedor{
   /* border: 1px solid var(--borde); */
   background-color: var(--bg-2);
   padding: calc(var(--padding-global) * 1.5);
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(1px); */
 }
 
 
@@ -402,6 +402,6 @@ input[type=checkbox]:disabled {
 }
 
 html {
-  background-image: url(/images/mainbg.jpg);
-  background-size: cover;
+  background-image: url(/images/50.png);
+  
 }
