@@ -1,10 +1,10 @@
 <script>
-  /**@type {Array.<{posicion: number, titulo: string, columna: string, ancho: number, ordenar: boolean}>}*/
-  export let columnas
   /**@type {Array.<Object.<string, {c: ConstructorOfATypedSvelteComponent, p: Object.<string, any>} | string | number>>}*/
   export let filas
+  /**@type {Array.<{posicion: number, titulo: string, columna: string, ancho: number, ordenar: boolean, valor: function(filas):any, desc:string}>}*/
+  export let columnas
 
-
+  /**@type {Array.<Object.<any,any>>}*/
   let filasOrdenado
 
   $: {
@@ -13,11 +13,13 @@
   }
 
   function crearDatos(){
+    /**@type {Array.<Object.<any,any>>}*/
     let tabla = []
     filas?.forEach(fila => {
+      /**@type {Object.<any, any>}*/
       let tablaFila = {}
       columnas.forEach((columna, n) => {
-        let data = Object.hasOwn(columna, 'getter') ? columna.getter(fila) : fila[columna.columna]
+        let data = Object.hasOwn(columna, 'valor') ? columna.valor(fila) : fila[columna.columna]
         tablaFila[n] = data  
       });
       tabla.push(tablaFila)
@@ -25,6 +27,7 @@
     filasOrdenado = tabla
   }
 
+  /**@param {number} nCol*/
   function ordenar(nCol){
     console.log('ordenando', nCol)
   }
@@ -88,7 +91,7 @@
   <thead>
     <tr>
       {#each columnas as columna, n}
-        <th style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}">
+        <th style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}" title={columna?.desc || ''}>
           {#if columna.ordenar}
             <button
               on:click={() => {ordenar(n)}}
@@ -105,7 +108,11 @@
       <tr>
         {#each columnas as columna, n}
           <td style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}">
-            {fila[n]}
+            {#if typeof fila[n] === 'string'}
+              {fila[n]}
+            {:else}
+              <svelte:component this={fila[n].c} {...fila[n].p}/>
+            {/if}
           </td>
         {/each}
       </tr>

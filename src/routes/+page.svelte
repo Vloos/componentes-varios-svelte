@@ -4,15 +4,19 @@
   import CompoDos from "$lib/components/compoDos.svelte";
 	import ModalCerrar from "$lib/components/componente-modal-cerrar.svelte";
   import DataGrid from "$lib/components/data-grid.svelte";
-
+  import PropTestCompo from "$lib/components/propTestCompo.svelte";
 	import Modal from "$lib/components/modal.svelte";
+	import { onMount } from "svelte";
+
   let filas
 
-  fetch('https://randomuser.me/api/?results=50')
-    .then(res => res.json())
-    .then(res => {
-      filas = res.results
-    })
+  onMount(() => {
+    fetch('https://randomuser.me/api/?results=50')
+      .then(res => res.json())
+      .then(res => {
+        filas = res.results
+      })
+  })
 
 
 
@@ -26,12 +30,24 @@
   let columnas = [
     {
       titulo: 'Nombre',
-      getter: (f) => `${f.name.first} ${f.name.last}`,
+      valor: (f) => `${f.name.first} ${f.name.last}`,
       ordenar: true
     },
     {
       titulo: 'Email',
       columna: 'email',
+      ancho: 500
+    },
+    {
+      titulo: 'Prop Test',
+      desc: 'Prueba para añadir componente con props, utilizando un callback que recive la fila actual y devuelve un objeto con el componente y los props',
+      valor: f => {
+        console.log('city', f.location.city);
+        return {
+          c: PropTestCompo,
+          p: {laProp: f.location.city}
+          }
+      },
       ancho: 500
     }
   ]
