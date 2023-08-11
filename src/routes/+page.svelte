@@ -11,7 +11,7 @@
   let filas
 
   onMount(() => {
-    fetch('https://randomuser.me/api/?results=50')
+    fetch('https://randomuser.me/api/?results=5')
       .then(res => res.json())
       .then(res => {
         filas = res.results
@@ -45,13 +45,13 @@
     },
     {
       titulo: 'Prop Test',
-      desc: 'Prueba para añadir componente con props, utilizando un callback que recive la fila actual y devuelve un objeto con el componente y los props',
+      desc: 'Prueba para añadir componente con props, utilizando un callback que recibe la fila y devuelve un objeto con el componente y los props',
       valor: f => {
         return {laProp: f.location.city}
       },
       componente: PropTestCompo,
       ordenar: 'laProp',
-      filtrar: 'laProp',
+      filtrar: 'value',
       ancho: 200,
     }
   ]

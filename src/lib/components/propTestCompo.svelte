@@ -1,5 +1,8 @@
 <script>
-  export let laProp = 'patata'
+  export let laProp = ''
+  export let value
+
+  value = laProp
 </script>
 
 

@@ -8,9 +8,9 @@
 
   /**
    * titulo: texto que aparece en la cabecera
-   * columna: campo al que hace referencia la columna. Muestra el valor directamente del campo
-   * valor: función que calcula el valor que se muestra. puede devolver una cadena para mostrar directamente, o un objeto que se utiliza como prop del componente
-   * componente: componente que se muestra, en lugar del valor. Utiliza como props un objeto devuelto por "valor"
+   * columna: campo al que hace referencia la columna. Muestra el valor del campo
+   * valor: función que calcula el valor que se muestra. puede devolver un texto para mostrar, o un objeto que se utiliza como prop del componente
+   * componente: componente que se muestra, en lugar del valor. Utiliza como props un objeto devuelto por "valor". Utiliza la prop "value" dentro del componente para calcular un valor que se va a poder utilizar para filtrar y ordenar
    * desc: texto que se muestra al mantener el cursor sobre la cabecera de la columna.
    * ancho: pixeles de ancho de la columna.
    * ordenar: true, si se puede ordenar por el valor de la columna, o el nombre de la prop por la que se ordena, si se utiliza componente (solo para props de tipo string)
@@ -37,12 +37,15 @@
   let col = null
   /**@type {Array.<number>}*/
   let buscarPor = []
+  let algo = []
 
   $: {
     filas
     crearDatos()
     guardarColumnasFiltrables()
   }
+
+  
 
   /**
    * Guardar las columnas por las que se puede filtrar 
@@ -103,7 +106,6 @@
    */
   function buscar(e){
     filasFiltrado = filasOrdenado.filter(fila => {
-      console.log('filtrando: ', fila);
       let filtra = false
       buscarPor.forEach(nCol => {
         // si es boolean, es true, asique debería poder filtrar el valor directamente de la columna
@@ -114,7 +116,11 @@
 
         // si es string, debería ser el nombre del prop que utiliza el componente
         } else if (typeof columnas[nCol].filtrar === 'string'){
-          if (fila[nCol].p[columnas[nCol].filtrar].toLowerCase().includes(e.detail.toLowerCase())){
+          if (columnas[nCol].filtrar.toLowerCase() === 'value'){
+            if (fila[nCol].value.toString().toLowerCase().includes(e.detail.toLowerCase())) {
+              filtra = true
+            }
+          } else if (fila[nCol].p[columnas[nCol].filtrar].toLowerCase().includes(e.detail.toLowerCase())){
             filtra = true
           }
         }
@@ -126,6 +132,10 @@
 
   function desplegar(n){
     col = n === col ? null : n
+  }
+
+  function dameAlgo(f, c) {
+    console.log(filasFiltrado[f][c]);
   }
 
   /**
@@ -205,14 +215,16 @@
     </tr>
   </thead>
   <tbody>
-    {#each filasFiltrado as fila}
+    {#each filasFiltrado as fila, fil}
       <tr>
-        {#each columnas as columna, n}
-          <td style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}">
-            {#if typeof fila[n] === 'string'}
-              {fila[n]}
+        {#each columnas as columna, col}
+          <td style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}"
+            on:click={() => {dameAlgo(fil, col)}}
+          >
+            {#if typeof fila[col] === 'string'}
+              {fila[col]}
             {:else}
-              <svelte:component this={fila[n].c} {...fila[n].p}/>
+              <svelte:component this={fila[col].c} {...fila[col].p} bind:value={fila[col].value}/>
             {/if}
           </td>
         {/each}
