@@ -1,6 +1,4 @@
 <script>
-	import Busqueda from "./busqueda.svelte";
-
   /**@type {Object.<string, {c: ConstructorOfATypedSvelteComponent, p: Object.<string, any>} | string | number>}*/
   let fila
   /**@type {Array.<typeof fila>}*/
@@ -23,8 +21,8 @@
    *   componente: ConstructorOfATypedSvelteComponent, 
    *   ancho: number,
    *   ordenar: boolean | string, 
+   *   filtrar: boolean | string,
    *   desc:string, 
-   *   filtrar: boolean
    * }>}
    */
   export let columnas
@@ -38,11 +36,13 @@
   /**@type {Array.<number>}*/
   let buscarPor = []
   let algo = []
+  let filtraPh = ''
 
   $: {
     filas
     crearDatos()
     guardarColumnasFiltrables()
+    buscaPlaceHolder()
   }
 
   
@@ -102,7 +102,7 @@
   /**
    * Busca la cadena de texto pasada por parámetro en los campos que se pueda buscar
    * según la configuración de las columnas
-   * @param {string} e Cadena de texto que se busca
+   * @param {any} e Cadena de texto que se busca
    */
   function buscar(e){
     filasFiltrado = filasOrdenado.filter(fila => {
@@ -110,17 +110,17 @@
       buscarPor.forEach(nCol => {
         // si es boolean, es true, asique debería poder filtrar el valor directamente de la columna
         if (typeof columnas[nCol].filtrar === 'boolean'){
-          if (fila[nCol].toLowerCase().includes(e.detail.toLowerCase())){
+          if (fila[nCol].toLowerCase().includes(e.toLowerCase())){
             filtra = true
           }
 
         // si es string, debería ser el nombre del prop que utiliza el componente
         } else if (typeof columnas[nCol].filtrar === 'string'){
           if (columnas[nCol].filtrar.toLowerCase() === 'value'){
-            if (fila[nCol].value.toString().toLowerCase().includes(e.detail.toLowerCase())) {
+            if (fila[nCol].value.toString().toLowerCase().includes(e.toLowerCase())) {
               filtra = true
             }
-          } else if (fila[nCol].p[columnas[nCol].filtrar].toLowerCase().includes(e.detail.toLowerCase())){
+          } else if (fila[nCol].p[columnas[nCol].filtrar].toLowerCase().includes(e.toLowerCase())){
             filtra = true
           }
         }
@@ -134,8 +134,14 @@
     col = n === col ? null : n
   }
 
-  function dameAlgo(f, c) {
-    console.log(filasFiltrado[f][c]);
+  function buscaPlaceHolder(){
+    filtraPh = 'Filtrar '
+    columnas.forEach((col, i) => {
+      filtraPh += col.titulo
+      if (i < columnas.length-2) filtraPh += ', '
+      if (i == columnas.length-2) filtraPh += ' o '
+    })
+    
   }
 
   /**
@@ -208,19 +214,12 @@
         </th>
       {/each}
     </tr>
-    <tr>
-      <th colspan={columnas.length}>
-        <Busqueda on:change={e => {buscar(e)}}/>
-      </th>
-    </tr>
   </thead>
   <tbody>
     {#each filasFiltrado as fila, fil}
       <tr>
         {#each columnas as columna, col}
-          <td style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}"
-            on:click={() => {dameAlgo(fil, col)}}
-          >
+          <td style="width:{columna?.ancho ? columna.ancho + 'px' : 'auto'}">
             {#if typeof fila[col] === 'string'}
               {fila[col]}
             {:else}
@@ -237,12 +236,29 @@
       </tr>
     {/each}
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan={columnas.length}>
+        <div>
+          <span>
+            {filasFiltrado.length} / {filasOrdenado.length} resultados
+          </span>
+          <input 
+            type="text"
+            on:input={e => buscar(e.target.value)}
+            class="buscainput"
+            placeholder={filtraPh}  
+          >
+        </div>
+      </td>
+    </tr>
+  </tfoot>
 </table>
 
 
 <style>
   table{
-    width: max-content;
+    width: unset;
   }
 
   tr {
@@ -258,5 +274,13 @@
     background-color: teal;
     place-content: center;
   }
+  
+  tfoot td div{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
 
+  .buscainput {
+    width: 100%;
+  }
 </style>

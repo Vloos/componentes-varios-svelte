@@ -11,7 +11,7 @@
   let filas
 
   onMount(() => {
-    fetch('https://randomuser.me/api/?results=5')
+    fetch('https://randomuser.me/api/?results=50')
       .then(res => res.json())
       .then(res => {
         filas = res.results
@@ -33,7 +33,7 @@
       desc: 'valor compuesto por los valores de dos columnas',
       valor: (f) => `${f.name.first} ${f.name.last}`,
       filtrar: true,
-      ancho: 200,
+      ancho: 300,
     },
     {
       titulo: 'Email',
@@ -41,10 +41,10 @@
       columna: 'email',
       ordenar: true,
       filtrar: true,
-      ancho:200,
+      ancho: 300,
     },
     {
-      titulo: 'Prop Test',
+      titulo: 'Ciudad',
       desc: 'Prueba para añadir componente con props, utilizando un callback que recibe la fila y devuelve un objeto con el componente y los props',
       valor: f => {
         return {laProp: f.location.city}
@@ -52,12 +52,12 @@
       componente: PropTestCompo,
       ordenar: 'laProp',
       filtrar: 'value',
-      ancho: 200,
-    }
+      ancho: 300,
+    },
   ]
 
 
-  /**@type {import('svelte').SvelteComponent}*/
+  /**@type {import('$lib/components/modal.svelte').default}*/
   let modal
 
   /**@param {ConstructorOfATypedSvelteComponent} c

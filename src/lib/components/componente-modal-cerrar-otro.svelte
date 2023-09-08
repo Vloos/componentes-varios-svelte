@@ -1,11 +1,6 @@
 <script>
-	import ComponenteModalCerrarOtro from "./componente-modal-cerrar-otro.svelte";
-	import Modal from "./modal.svelte";
-  ComponenteModalCerrarOtro
-
   export let cerrarFn = () => 'funcion'
 
-  let modal
 
   function cerrar(){
     if (cerrarFn){
@@ -13,10 +8,7 @@
     }
   }
 
- 
-  function abrirOtro(){
-    modal.abrir({c:ComponenteModalCerrarOtro}, false)
-  }
+
 
 
 </script>
@@ -27,7 +19,3 @@
 <button
   on:click={cerrar}
 >Pues OK</button>
-<button
-  on:click={abrirOtro}
->Abrir Otro</button>
-<Modal bind:this={modal}/>
