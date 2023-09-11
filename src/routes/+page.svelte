@@ -7,8 +7,8 @@
   import PropTestCompo from "$lib/components/propTestCompo.svelte";
 	import Modal from "$lib/components/modal.svelte";
 	import { onMount } from "svelte";
-  import { SvelteToast, toast } from '@zerodevx/svelte-toast' // https://github.com/zerodevx/svelte-toast
-  import { toastThemes } from "$lib/toastthemes";
+  import { notifications } from "$lib/toastthemes";
+
 
 
   let filas
@@ -72,7 +72,6 @@
 
 </script>
 
-<SvelteToast/>
 <Modal bind:this={modal}/>
 <div class="botonera">
   <button
@@ -84,8 +83,10 @@
   <button
     on:click={() => {abrirModal(ModalCerrar)}}
   >Abrir Cerrar</button>
-  <button on:click={() => toast.push('Éxitazo!', toastThemes.success)}>Éxito</button>
-  <button on:click={() => toast.push('Errorazo!', toastThemes.error)}>Error</button>
+  <button on:click={() => notifications.info('Información!')}>Información</button>
+  <button on:click={() => notifications.success('Éxitazo!')}>Éxito</button>
+  <button on:click={() => notifications.warning('Advertencia!')}>Advertencia</button>
+  <button on:click={() => notifications.failure('Errorazo!')}>Error</button>
 </div>
 <Tabs {items}/>
 <DataGrid {columnas} {filas}/>

@@ -1,16 +1,35 @@
-export const toastThemes = {
-  success: {
+import { toast } from '@zerodevx/svelte-toast' // https://github.com/zerodevx/svelte-toast
+
+export class notifications {
+  static info = m => toast.push(m, {
     theme: {
-      '--toastColor': 'mintcream',
-      '--toastBackground': 'rgba(72,187,120,0.9)',
-      '--toastBarBackground': '#2F855A'
+      '--toastColor': 'white',
+      '--toastBackground': 'var(--info)',
+      '--toastBarBackground': 'var(--info-bar)'
     }
-  },
-  error: {
+  })
+
+  static success = m => toast.push(m, {
     theme: {
-      '--toastColor': 'grey',
-      '--toastBackground': '#D15C58',
-      '--toastBarBackground': '#C04B47'
+      '--toastColor': 'white',
+      '--toastBackground': 'var(--success)',
+      '--toastBarBackground': 'var(--success-bar)'
     }
-  }
+  })
+  
+  static warning = m => toast.push(m, { 
+    theme: {
+      '--toastColor': 'whie',
+      '--toastBackground': 'var(--warning)',
+      '--toastBarBackground': 'var(--warning-bar)'
+    }
+  })
+  
+  static failure = m => toast.push(m, { 
+    theme: {
+      '--toastColor': 'white',
+      '--toastBackground': 'var(--failure)',
+      '--toastBarBackground': 'var(--failure-bar)'
+    }
+  })
 }

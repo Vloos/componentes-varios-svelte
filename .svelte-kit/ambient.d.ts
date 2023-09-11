@@ -78,6 +78,7 @@ declare module '$env/static/private' {
 	export const OBS_PLUGINS_DATA_PATH: string;
 	export const OBS_PLUGINS_PATH: string;
 	export const OneDrive: string;
+	export const OneDriveConsumer: string;
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const OS: string;
 	export const Path: string;
@@ -192,6 +193,7 @@ declare module '$env/dynamic/private' {
 		OBS_PLUGINS_DATA_PATH: string;
 		OBS_PLUGINS_PATH: string;
 		OneDrive: string;
+		OneDriveConsumer: string;
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		OS: string;
 		Path: string;
