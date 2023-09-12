@@ -1,15 +1,9 @@
 <script>
-  export let cerrarFn = () => 'funcion'
-
+  import {modals} from '$lib/components/modal.svelte'
 
   function cerrar(){
-    if (cerrarFn){
-      cerrarFn();
-    }
+    modals.close()
   }
-
-
-
 
 </script>
 

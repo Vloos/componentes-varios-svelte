@@ -1,17 +1,16 @@
 <script>
 	import CompoUno from '$lib/components/compouno.svelte';
-  import Modal from "./modal.svelte";
+  import {modals} from "$lib/components/modal.svelte";
 
   let modal
 
   function abrirModal() {
-    modal.abrir({c:CompoUno})    
+    modals.open({c:CompoUno})    
   }
 
 </script>
 
 
-<Modal bind:this={modal}/>
 <button
   on:click={abrirModal}
 >Abrir Modal</button>

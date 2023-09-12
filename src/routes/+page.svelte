@@ -5,9 +5,9 @@
 	import ModalCerrar from "$lib/components/componente-modal-cerrar.svelte";
   import DataGrid from "$lib/components/datagrid/data-grid.svelte";
   import PropTestCompo from "$lib/components/propTestCompo.svelte";
-	import Modal from "$lib/components/modal.svelte";
+	import Modal, {modals} from "$lib/components/modal.svelte";
 	import { onMount } from "svelte";
-  import { notifications } from "$lib/toastthemes";
+  import { notifications } from "$lib/notifications";
 
 
 
@@ -67,12 +67,15 @@
    * @param {Object.<string, any> | undefined} p
   */
   function abrirModal(c, p = undefined) {
-    modal.abrir({c, p})
+    
+    modals.open({c, p})
   }
+
+
 
 </script>
 
-<Modal bind:this={modal}/>
+
 <div class="botonera">
   <button
     on:click={() => {abrirModal(CompoUno)}}
@@ -89,4 +92,4 @@
   <button on:click={() => notifications.failure('Errorazo!')}>Error</button>
 </div>
 <Tabs {items}/>
-<DataGrid {columnas} {filas}/>
+<!-- <DataGrid {columnas} {filas}/> -->
